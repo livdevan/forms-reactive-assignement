@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormArray,
@@ -12,23 +12,18 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  fb: FormBuilder;
-  newForm = new FormGroup({
-    projectName: new FormControl(null, [
-      Validators.required,
-      this.forbiddenName
-    ]),
-    mail: new FormControl(null, [Validators.required, Validators.email]),
-    projectStatus: new FormArray([])
-  });
-  forbiddenProjectName = 'Test';
+export class AppComponent implements OnInit {
+  projectForm: FormGroup;
 
-  forbiddenName(control: FormControl): { [s: string]: boolean } {
-    if (this.newForm.controls.projectName.value === this.forbiddenProjectName) {
-      return { nameIsForbidden: true };
-    } else {
-      return null;
-    }
+  ngOnInit(): void {
+    this.projectForm = new FormGroup({
+      projectName: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      projectStatus: new FormControl('critical')
+    });
+  }
+
+  onSubmit() {
+    console.log(this.projectForm.value);
   }
 }
